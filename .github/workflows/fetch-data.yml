@@ -1,0 +1,26 @@
+name: fetch-data
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  push:
+    paths:
+      - .github/workflows/fetch-data.yml
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup deno
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.29.0
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Process files
+        run: deno run -A --unstable ./fetch-data.ts ${{secrets.GUARDIAN_KEY}} ${{secrets.NYTIMES_KEY}} ${{secrets.METEOSTAT_KEY}}
+      - name: Commit files
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "fetched data"
+          git push
