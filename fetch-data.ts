@@ -82,9 +82,9 @@ async function fetch_nytimes_articles(from_date: string, to_date: string): Promi
   let page = 1;
   let has_fetched_all_articles = false;
   let nytimes_articles: Article[] = [];
-
+  
   while (!has_fetched_all_articles && page < 100) {
-    const nytimes_data_res = await fetch(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${NYTIMES_KEY}&begin_date=${from_date}&end_date=${to_date}&page=${page}`);
+    const nytimes_data_res = await fetch(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${NYTIMES_KEY}&begin_date=${from_date}&end_date=${to_date}&page=${page}&fq=section_name:("Arts" "Automobiles" "Autos" "Blogs" "Books" "Business" "Education" "Front Page" "Giving" "Health" "Job Market" "Movies" "Multimedia" "National" "New York" "Olympics" "Opinion" "Public Editor" "Real Estate" "Science" "Sports" "Style" "Sunday Magazine" "Sunday Review" "Technology" "The Public Editor"  "Theater" "Today's Headlines" "Travel" "U.S." "Washington" "World" "Your Money")`);
     if (!nytimes_data_res.ok) {
       console.log(`${nytimes_data_res.status}: New York Times (page ${page}) failed to fetch: ${await nytimes_data_res.text()}`);
       await delay(6000);
