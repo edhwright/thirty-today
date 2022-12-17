@@ -62,8 +62,7 @@ async function fetch_guardian_articles(from_date: string, to_date: string): Prom
           web_url: article.webUrl,
           abstract: null,
           thumbnail: null,
-          section: article.pillarName,
-          subsection: article.sectionName
+          section: article.sectionName
         })),
       ];
 
@@ -107,8 +106,7 @@ async function fetch_nytimes_articles(from_date: string, to_date: string): Promi
                   thumbnail_height: article.multimedia[0].height,
                 }
               : null,
-          section: article.section_name,
-          subsection: article.subsection_name
+          section: article.section_name
         })),
       ];
 
@@ -210,7 +208,6 @@ interface Article {
     thumbnail_height: number;
   } | null;
   section: string;
-  subsection: string;
 }
 
 interface Event {
