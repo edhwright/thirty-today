@@ -143,7 +143,7 @@ async function fetch_wiki_events(from_date: string, to_date: string): Promise<Ev
         ...filtered_wiki_data.map((event) => ({
           date: dayjs(date).format("YYYYMMDD"),
           headline: event.text,
-          pages: event.pages.map((page) => ({
+          pages: event.pages.filter((page) => page.description !== "Day of the year").map((page) => ({
             title: page.titles.normalized,
             web_url: page.content_urls.desktop.page,
             description: page.description,
