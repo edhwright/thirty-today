@@ -1,4 +1,5 @@
 /** @jsx h */
+import page_data from "./data.json" assert { type: "json" };
 import { serve } from "https://deno.land/std@0.155.0/http/server.ts";
 import { h, html } from "https://deno.land/x/htm@0.0.10/mod.tsx";
 import { UnoCSS } from "https://deno.land/x/htm@0.0.10/plugins.ts";
@@ -19,8 +20,6 @@ const handler = async (req: Request, context) => {
   const location_data = await fetch("http://ip-api.com/json/" + ip).then((d) =>
     d.json()
   );
-
-  const page_data: PageData = await fetch("./data.json").then((d) => d.json());
 
   return html({
     lang: "en",
