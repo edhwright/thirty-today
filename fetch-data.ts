@@ -50,7 +50,7 @@ async function fetch_guardian_articles(from_date: string, to_date: string): Prom
     const guardian_data_res = await fetch(`https://content.guardianapis.com/search?api-key=${GUARDIAN_KEY}&from-date=${from_date}&to-date=${to_date}&page=${page}&page-size=50`);
     if (!guardian_data_res.ok) {
       console.log(`${guardian_data_res.status}: Guardian (page ${page}) failed to fetch: ${await guardian_data_res.text()}`);
-      await delay(10000);
+      await delay(16000);
       page++;
     } else {
       const guardian_data = await guardian_data_res.json();
@@ -67,7 +67,7 @@ async function fetch_guardian_articles(from_date: string, to_date: string): Prom
       ];
 
       if (page < guardian_data.response.pages) {
-        await delay(10000);
+        await delay(16000);
         page++;
       } else {
         has_fetched_all_articles = true;
@@ -87,7 +87,7 @@ async function fetch_nytimes_articles(from_date: string, to_date: string): Promi
     const nytimes_data_res = await fetch(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${NYTIMES_KEY}&begin_date=${from_date}&end_date=${to_date}&page=${page}&fq=section_name:("Arts" "Automobiles" "Autos" "Blogs" "Books" "Business" "Education" "Front Page" "Giving" "Health" "Job Market" "Movies" "Multimedia" "National" "New York" "Olympics" "Opinion" "Public Editor" "Real Estate" "Science" "Sports" "Style" "Sunday Magazine" "Sunday Review" "Technology" "The Public Editor"  "Theater" "Today's Headlines" "Travel" "U.S." "Washington" "World" "Your Money")`);
     if (!nytimes_data_res.ok) {
       console.log(`${nytimes_data_res.status}: New York Times (page ${page}) failed to fetch: ${await nytimes_data_res.text()}`);
-      await delay(10000);
+      await delay(16000);
       page++;
     } else {
       const nytimes_data = await nytimes_data_res.json();
@@ -111,7 +111,7 @@ async function fetch_nytimes_articles(from_date: string, to_date: string): Promi
       ];
 
       if (nytimes_data.response.meta.offset < nytimes_data.response.meta.hits) {
-        await delay(10000);
+        await delay(16000);
         page++;
       } else {
         has_fetched_all_articles = true;
@@ -126,9 +126,9 @@ async function fetch_wiki_events(from_date: string, to_date: string): Promise<Ev
   let wiki_events: Event[] = [];
 
   await fetch_date_data(dayjs(from_date).format("YYYY-MM-DD"));
-  await delay(10000);
+  await delay(16000);
   await fetch_date_data(dayjs(from_date).add(1, "day").format("YYYY-MM-DD"));
-  await delay(10000);
+  await delay(16000);
   await fetch_date_data(dayjs(to_date).format("YYYY-MM-DD"));
 
   async function fetch_date_data(date: string) {
@@ -171,7 +171,7 @@ async function fetch_weather(from_date: string, to_date: string): Promise<Weathe
   let weather: Weather[] = [];
 
   await fetch_location_data(london_location);
-  await delay(10000);
+  await delay(16000);
   await fetch_location_data(ny_location);
 
   async function fetch_location_data(location: { name: string; lon: number; lat: number }) {
