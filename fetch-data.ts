@@ -1,6 +1,6 @@
 import { writeJSON } from "https://deno.land/x/flat@0.0.15/mod.ts";
-import { group } from "https://cdn.skypack.dev/pin/d3-array@v3.2.1-hGTrvmvXYXil9KElf3uD/mode=imports,min/optimized/d3-array.js";
-import dayjs from "https://cdn.skypack.dev/pin/dayjs@v1.11.6-77Jm7cE3hNuQn3XDVXyF/mode=imports,min/optimized/dayjs.js";
+import { group } from "https://esm.sh/d3-array@3.2.1";
+import dayjs from "https://esm.sh/dayjs@1.11.7";
 
 const [GUARDIAN_KEY, NYTIMES_KEY, METEOSTAT_KEY] = Deno.args;
 

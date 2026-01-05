@@ -4,7 +4,7 @@ import { serve } from "https://deno.land/std@0.155.0/http/server.ts";
 import { h, html } from "https://deno.land/x/htm@0.0.10/mod.tsx";
 import { UnoCSS } from "https://deno.land/x/htm@0.0.10/plugins.ts";
 import { group } from "https://esm.sh/d3-array@3.2.1";
-import dayjs from "https://esm.sh/dayjs@1.11.7/";
+import dayjs from "https://esm.sh/dayjs@1.11.7";
 import utc from "https://esm.sh/dayjs@1.11.7/plugin/utc";
 import timezone from "https://esm.sh/dayjs@1.11.7/plugin/timezone";
 import advanced from "https://esm.sh/dayjs@1.11.7/plugin/advancedFormat";
