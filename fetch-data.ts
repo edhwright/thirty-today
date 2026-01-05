@@ -79,7 +79,7 @@ async function fetch_guardian_articles(from_date: string, to_date: string): Prom
 }
 
 async function fetch_nytimes_articles(from_date: string, to_date: string): Promise<Article[]> {
-  let page = 1;
+  let page = 0;
   let has_fetched_all_articles = false;
   let nytimes_articles: Article[] = [];
   
@@ -91,6 +91,12 @@ async function fetch_nytimes_articles(from_date: string, to_date: string): Promi
       page++;
     } else {
       const nytimes_data = await nytimes_data_res.json();
+      
+      if (!nytimes_data.response || !nytimes_data.response.metadata) {
+        console.log(`NYTimes returned unexpected response:`, JSON.stringify(nytimes_data));
+        break;
+      }
+      
       nytimes_articles = [
         ...nytimes_articles,
         ...nytimes_data.response.docs.map((article) => ({
@@ -99,18 +105,18 @@ async function fetch_nytimes_articles(from_date: string, to_date: string): Promi
           web_url: article.web_url,
           abstract: article.abstract,
           thumbnail:
-            article.multimedia.length > 1 && article.multimedia[0].type === "image"
+            article.multimedia?.thumbnail
               ? {
-                  thumbnail_url: `https://nytimes.com/${article.multimedia[0].url}`,
-                  thumbnail_width: article.multimedia[0].width,
-                  thumbnail_height: article.multimedia[0].height,
+                  thumbnail_url: article.multimedia.thumbnail.url,
+                  thumbnail_width: article.multimedia.thumbnail.width,
+                  thumbnail_height: article.multimedia.thumbnail.height,
                 }
               : null,
           section: article.section_name
         })),
       ];
 
-      if (nytimes_data.response.meta.offset < nytimes_data.response.meta.hits) {
+      if (nytimes_data.response.metadata.offset < nytimes_data.response.metadata.hits) {
         await delay(16000);
         page++;
       } else {
