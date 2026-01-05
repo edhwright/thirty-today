@@ -96,10 +96,12 @@ async function fetch_nytimes_articles(from_date: string, to_date: string): Promi
         console.log(`NYTimes returned unexpected response:`, JSON.stringify(nytimes_data));
         break;
       }
+
+      const docs = nytimes_data.response.docs || [];
       
       nytimes_articles = [
         ...nytimes_articles,
-        ...nytimes_data.response.docs.map((article) => ({
+        ...docs.map((article) => ({
           date: dayjs(article.pub_date).format("YYYYMMDD"),
           headline: article.headline.main,
           web_url: article.web_url,
