@@ -216,16 +216,34 @@ function Country(props: CountryProps) {
           <h3 class="text-lg m-b-2 p-l-2 sm:p-l-0">
             {props.country.publication.name}
           </h3>
-          {[...articles_by_section.keys()].sort().map((section) => (
-            <section class="sm:grid grid-cols-8 gap-1">
-              <h4 class="text-base m-t-3 m-b-2 sm:m-y-1 sm:p-y-2 max-w-max sm:text-sm border-b-2 border-dark sm:border-0 m-l-2 sm:m-l-0">
-                {section}
-              </h4>
-              <div class="col-span-7">
-                {articles_by_section
-                  .get(section)
-                  .sort((a, b) => a.headline.localeCompare(b.headline))
-                  .map((article) => (
+          {[...articles_by_section.keys()].sort().map((section) => {
+            // Remove duplicates based on headline
+            const sectionArticles = articles_by_section.get(section);
+            const uniqueArticles = Array.from(
+              new Map(sectionArticles.map(article => [article.headline, article])).values()
+            );
+            
+            // Sort: articles with abstracts first, then alphabetically within each group
+            const sortedArticles = uniqueArticles.sort((a, b) => {
+              const aHasAbstract = !!a.abstract;
+              const bHasAbstract = !!b.abstract;
+              
+              if (aHasAbstract && !bHasAbstract) return -1;
+              if (!aHasAbstract && bHasAbstract) return 1;
+              return a.headline.localeCompare(b.headline);
+            });
+            
+            // Split into two groups
+            const withAbstract = sortedArticles.filter(a => a.abstract);
+            const withoutAbstract = sortedArticles.filter(a => !a.abstract);
+            
+            return (
+              <section class="sm:grid grid-cols-8 gap-1">
+                <h4 class="text-base m-t-3 m-b-2 sm:m-y-1 sm:p-y-2 max-w-max sm:text-sm border-b-2 border-dark sm:border-0 m-l-2 sm:m-l-0">
+                  {section}
+                </h4>
+                <div class="col-span-7">
+                  {withAbstract.map((article) => (
                     <details class="m-y-1 open-bg-op-10 open-bg-dark-1">
                       <summary class="p-2 text-sm list-none cursor-pointer hover-bg-op-10 hover-bg-dark-1">
                         {article.headline}
@@ -251,9 +269,36 @@ function Country(props: CountryProps) {
                       </div>
                     </details>
                   ))}
-              </div>
-            </section>
-          ))}
+                  {withAbstract.length > 0 && withoutAbstract.length > 0 && (
+                    <hr class="m-y-2 opacity-30" />
+                  )}
+                  {withoutAbstract.map((article) => (
+                    <details class="m-y-1 open-bg-op-10 open-bg-dark-1">
+                      <summary class="p-2 text-sm list-none cursor-pointer hover-bg-op-10 hover-bg-dark-1">
+                        {article.headline}
+                      </summary>
+                      <div class="p-2">
+                        {article.thumbnail && (
+                          <img
+                            class="m-b-2"
+                            src={article.thumbnail.thumbnail_url}
+                            width={article.thumbnail.thumbnail_width}
+                            height={article.thumbnail.thumbnail_height}
+                            alt="thumbnail"
+                          />
+                        )}
+                        <p class="text-sm underline">
+                          <a href={article.web_url} target="_blank">
+                            Full article
+                          </a>
+                        </p>
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
         </section>
       </section>
       <hr />
